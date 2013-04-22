@@ -72,5 +72,26 @@ exports.track = {
             test.equal(e, undefined, "error should be undefined");
             test.done();
         });
+    },
+
+    "correctly handles special name_tag property": function(test) {
+        var event = "test",
+        props = { key: 'val', name_tag: 'name' },
+        expected_endpoint = "/track",
+        expected_data = {
+            event: 'test',
+            properties: {
+                key: 'val'
+            },
+            mp_name_tag: 'name'
+        };
+
+        this.mixpanel.track(event, props);
+
+        test.ok(
+            this.mixpanel.send_request.calledWithMatch(expected_endpoint, expected_data),
+            "track didn't call send_request with correct arguments"
+        );
+        test.done();
     }
 };
